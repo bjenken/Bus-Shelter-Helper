@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="60dp"
+    android:descendantFocusability="blocksDescendants"
+    android:gravity="center"
+    android:elevation="1dp">
+
+    <TextView
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/displayStopRowLayoutTextViewRoutes"
+        android:text="Routes"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:layout_below="@+id/displayStopRowLayoutTextViewLocation"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="center"
+        android:layout_toRightOf="@+id/displayStopRowLayoutTextViewStopId"
+        android:layout_toEndOf="@+id/displayStopRowLayoutTextViewStopId" />
+
+    <TextView
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/displayStopRowLayoutTextViewLocation"
+        android:text="Location"
+        android:gravity="center"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/displayStopRowLayoutTextViewStopId"
+        android:layout_toEndOf="@+id/displayStopRowLayoutTextViewStopId" />
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/displayStopRowLayoutTextViewStopId"
+        android:text="Stop Id"
+        android:gravity="center"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+       />
+
+
+</RelativeLayout>
