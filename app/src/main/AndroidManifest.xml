@@ -16,6 +16,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Stop.StopsListActivity" />
+        <activity android:name=".Route.RoutesListActivity" />
     </application>
 
 </manifest>

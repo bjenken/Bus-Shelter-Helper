@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import com.example.brettjenken.honourstutorial.R;
+import com.example.brettjenken.honourstutorial.Route.RoutesListActivity;
 import com.example.brettjenken.honourstutorial.UIBackgroundTaskCallback;
 
 public class StopsListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, UIBackgroundTaskCallback {
@@ -40,9 +41,9 @@ public class StopsListActivity extends AppCompatActivity implements AdapterView.
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         StopUIModel entry= (StopUIModel) parent.getAdapter().getItem(position);
-        //Intent intent = new Intent(StopsListActivity.this, RoutesListActivity.class);
-        //intent.putExtra("EXTRA_STOP_ID", entry.getId());
-        //startActivity(intent);
+        Intent intent = new Intent(StopsListActivity.this, RoutesListActivity.class);
+        intent.putExtra("EXTRA_STOP_ID", entry.getId());
+        startActivity(intent);
     }
 
     public boolean createSearchDialog(){
@@ -60,9 +61,9 @@ public class StopsListActivity extends AppCompatActivity implements AdapterView.
                         String query = input.getText().toString();
                         //validate it here
                         //then throw the user over to the appropriate listing
-                        //Intent intent = new Intent(StopsListActivity.this, RoutesListActivity.class);
-                        //intent.putExtra("EXTRA_STOP_ID", query);
-                        //startActivity(intent);
+                        Intent intent = new Intent(StopsListActivity.this, RoutesListActivity.class);
+                        intent.putExtra("EXTRA_STOP_ID", query);
+                        startActivity(intent);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
