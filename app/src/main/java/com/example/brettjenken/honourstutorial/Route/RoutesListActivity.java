@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.example.brettjenken.honourstutorial.R;
+import com.example.brettjenken.honourstutorial.Times.TimesListActivity;
 import com.example.brettjenken.honourstutorial.UIBackgroundTaskCallback;
 
 public class RoutesListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, UIBackgroundTaskCallback {
@@ -46,28 +47,14 @@ public class RoutesListActivity extends AppCompatActivity implements AdapterView
                 }
             }
         }
-        //Intent intent = new Intent(RoutesListActivity.this, TimesListActivity.class);
-        //intent.putExtra("EXTRA_ROUTE_NUM", entry.getNumber());
-        //intent.putExtra("EXTRA_STOP_ID", stopId);
-        //intent.putExtra("EXTRA_ROUTE_DIR", entry.getDirection());
-        //intent.putExtra("EXTRA_MULTI_ROUTE_FLAG", multiRoute);
-        //startActivity(intent);
+        Intent intent = new Intent(RoutesListActivity.this, TimesListActivity.class);
+        intent.putExtra("EXTRA_ROUTE_NUM", entry.getNumber());
+        intent.putExtra("EXTRA_STOP_ID", stopId);
+        intent.putExtra("EXTRA_ROUTE_DIR", entry.getDirection());
+        intent.putExtra("EXTRA_MULTI_ROUTE_FLAG", multiRoute);
+        startActivity(intent);
     }
 
-    //@Override
-    //public void serviceSuccess(StopAPIModel stop) {
-    //    dialog.cancel();
-    //    RoutesBackgroundTask addStopBackgroundTask = new RoutesBackgroundTask(this, this, stop);
-    //    addStopBackgroundTask.execute("add_stop_entry");
-    //    RoutesBackgroundTask routesBackgroundTask = new RoutesBackgroundTask(this, this, stop);
-    //    routesBackgroundTask.execute("get_all_routes");
-    //}
-
-    //@Override
-    //public void serviceFailure(Exception e) {
-    //    dialog.cancel();
-    //    Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-    //}
 
     @Override
     public void backGroundTaskSuccess(String result) {

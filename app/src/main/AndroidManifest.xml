@@ -17,6 +17,7 @@
         </activity>
         <activity android:name=".Stop.StopsListActivity" />
         <activity android:name=".Route.RoutesListActivity" />
+        <activity android:name=".Times.TimesListActivity" />
     </application>
 
 </manifest>
