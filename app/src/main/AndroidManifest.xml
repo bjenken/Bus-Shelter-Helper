@@ -15,9 +15,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Stop.StopsListActivity" />
-        <activity android:name=".Route.RoutesListActivity" />
-        <activity android:name=".Times.TimesListActivity" />
+        <activity android:name=".Ui.Stop.StopsListActivity" />
+        <activity android:name=".Ui.Route.RoutesListActivity" />
+        <activity android:name=".Ui.Times.TimesListActivity" />
     </application>
 
 </manifest>

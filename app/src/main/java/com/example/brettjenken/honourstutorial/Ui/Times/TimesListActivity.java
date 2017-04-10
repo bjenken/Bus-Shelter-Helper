@@ -1,4 +1,4 @@
-package com.example.brettjenken.honourstutorial.Times;
+package com.example.brettjenken.honourstutorial.Ui.Times;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -11,9 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.example.brettjenken.honourstutorial.R;
-import com.example.brettjenken.honourstutorial.UIBackgroundTaskCallback;
+import com.example.brettjenken.honourstutorial.Ui.UiBackgroundTaskCallback;
 
-public class TimesListActivity extends AppCompatActivity implements UIBackgroundTaskCallback {
+public class TimesListActivity extends AppCompatActivity implements UiBackgroundTaskCallback {
     String stopId, routeNum, direction;
     Boolean multiRoute;
     Dialog dialog;

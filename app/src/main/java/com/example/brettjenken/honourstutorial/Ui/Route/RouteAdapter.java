@@ -1,4 +1,4 @@
-package com.example.brettjenken.honourstutorial.Route;
+package com.example.brettjenken.honourstutorial.Ui.Route;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -20,7 +20,7 @@ public class RouteAdapter extends ArrayAdapter{
         super(context, resource);
     }
 
-    public void add(RouteUIModel route) {
+    public void add(RouteUiModel route) {
         list.add(route);
         super.add(route);
     }
@@ -49,7 +49,7 @@ public class RouteAdapter extends ArrayAdapter{
         }else {
             routeHolder = (RouteHolder)row.getTag();
         }
-        RouteUIModel route = (RouteUIModel)getItem(position);
+        RouteUiModel route = (RouteUiModel)getItem(position);
         routeHolder.txNum.setText(route.getNumber());
         routeHolder.txDirection.setText(route.getDirection());
 

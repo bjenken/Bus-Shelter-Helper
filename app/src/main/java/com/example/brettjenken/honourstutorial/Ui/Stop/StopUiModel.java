@@ -1,10 +1,10 @@
-package com.example.brettjenken.honourstutorial.Stop;
+package com.example.brettjenken.honourstutorial.Ui.Stop;
 
 /**
  * Created by Brett on 11/24/2016.
  */
-public class StopUIModel {
-    public StopUIModel(){
+public class StopUiModel {
+    public StopUiModel(){
     }
 
 

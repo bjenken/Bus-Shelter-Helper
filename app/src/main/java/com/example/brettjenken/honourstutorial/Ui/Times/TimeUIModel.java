@@ -1,4 +1,4 @@
-package com.example.brettjenken.honourstutorial.Times;
+package com.example.brettjenken.honourstutorial.Ui.Times;
 
 /**
  * Created by Brett on 11/24/2016.

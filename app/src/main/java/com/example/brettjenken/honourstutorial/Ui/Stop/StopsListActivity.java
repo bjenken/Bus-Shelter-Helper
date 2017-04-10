@@ -1,4 +1,4 @@
-package com.example.brettjenken.honourstutorial.Stop;
+package com.example.brettjenken.honourstutorial.Ui.Stop;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -13,10 +13,11 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import com.example.brettjenken.honourstutorial.R;
-import com.example.brettjenken.honourstutorial.Route.RoutesListActivity;
-import com.example.brettjenken.honourstutorial.UIBackgroundTaskCallback;
+import com.example.brettjenken.honourstutorial.Ui.Route.RoutesListActivity;
+import com.example.brettjenken.honourstutorial.Ui.UiBackgroundTaskCallback;
+import com.example.brettjenken.honourstutorial.Ui.UiUtils;
 
-public class StopsListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, UIBackgroundTaskCallback {
+public class StopsListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, UiBackgroundTaskCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +35,13 @@ public class StopsListActivity extends AppCompatActivity implements AdapterView.
         lv.setOnItemClickListener(StopsListActivity.this);
 
         StopsBackgroundTask stopsBackgroundTask = new StopsBackgroundTask(this, this);
-        stopsBackgroundTask.execute("get_all_stops");
+        stopsBackgroundTask.execute(UiUtils.StopBackGroundTaskInputValues.GET_ALL_STOPS.name());
 
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        StopUIModel entry= (StopUIModel) parent.getAdapter().getItem(position);
+        StopUiModel entry= (StopUiModel) parent.getAdapter().getItem(position);
         Intent intent = new Intent(StopsListActivity.this, RoutesListActivity.class);
         intent.putExtra("EXTRA_STOP_ID", entry.getId());
         startActivity(intent);
@@ -51,9 +52,9 @@ public class StopsListActivity extends AppCompatActivity implements AdapterView.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         EditText input = new EditText(this);
         input.setId(R.id.edit_text_stop_num);
-        builder.setTitle("Enter StopUIModel ID")
+        builder.setTitle("Enter StopUiModel ID")
                 .setView(input)
-                .setPositiveButton("View StopUIModel", new DialogInterface.OnClickListener(){
+                .setPositiveButton("View StopUiModel", new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int id){
                         Dialog d = (Dialog)dialog;
@@ -97,6 +98,6 @@ public class StopsListActivity extends AppCompatActivity implements AdapterView.
         super.onRestart();
         //When BACK BUTTON is pressed, the activity on the stack is restarted
         StopsBackgroundTask stopsBackgroundTask = new StopsBackgroundTask(this, this);
-        stopsBackgroundTask.execute("get_all_stops");
+        stopsBackgroundTask.execute(UiUtils.StopBackGroundTaskInputValues.GET_ALL_STOPS.name());
     }
 }

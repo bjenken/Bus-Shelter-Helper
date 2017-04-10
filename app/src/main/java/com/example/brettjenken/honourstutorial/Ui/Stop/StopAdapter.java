@@ -1,4 +1,4 @@
-package com.example.brettjenken.honourstutorial.Stop;
+package com.example.brettjenken.honourstutorial.Ui.Stop;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -22,7 +22,7 @@ public class StopAdapter extends ArrayAdapter{
         super(context, resource);
     }
 
-    public void add(StopUIModel stop) {
+    public void add(StopUiModel stop) {
         list.add(stop);
         super.add(stop);
     }
@@ -52,7 +52,7 @@ public class StopAdapter extends ArrayAdapter{
         }else {
             stopHolder = (StopHolder)row.getTag();
         }
-        StopUIModel stop = (StopUIModel)getItem(position);
+        StopUiModel stop = (StopUiModel)getItem(position);
         stopHolder.txId.setText(stop.getId().toString());
         stopHolder.txLocation.setText(stop.getLocation().toString());
         stopHolder.txRoutes.setText(stop.getRoutes().toString());

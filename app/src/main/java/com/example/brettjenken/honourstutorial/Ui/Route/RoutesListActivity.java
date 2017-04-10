@@ -1,4 +1,4 @@
-package com.example.brettjenken.honourstutorial.Route;
+package com.example.brettjenken.honourstutorial.Ui.Route;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -10,12 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
-import com.example.brettjenken.honourstutorial.R;
-import com.example.brettjenken.honourstutorial.Times.TimesListActivity;
-import com.example.brettjenken.honourstutorial.UIBackgroundTaskCallback;
 
-public class RoutesListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, UIBackgroundTaskCallback {
+import com.example.brettjenken.honourstutorial.R;
+import com.example.brettjenken.honourstutorial.Ui.Times.TimesListActivity;
+import com.example.brettjenken.honourstutorial.Ui.UiBackgroundTaskCallback;
+import com.example.brettjenken.honourstutorial.Ui.UiUtils;
+
+public class RoutesListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, UiBackgroundTaskCallback {
     ProgressDialog dialog;
     String stopId;
     @Override
@@ -29,19 +30,19 @@ public class RoutesListActivity extends AppCompatActivity implements AdapterView
         RoutesBackgroundTask routesBackgroundTask = new RoutesBackgroundTask(this, this);
         dialog = ProgressDialog.show(RoutesListActivity.this, "",
                 "Loading. Please wait...", true);
-        routesBackgroundTask.execute("get_all_routes");
+        routesBackgroundTask.execute(UiUtils.RouteBackGroundTaskInputValues.GET_ROUTES_FROM_APP_DB.name());
 
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Boolean multiRoute = false;
-        RouteUIModel entry = (RouteUIModel) parent.getAdapter().getItem(position);
+        RouteUiModel entry = (RouteUiModel) parent.getAdapter().getItem(position);
         //Here I am checking to see if the stop has multiple directions for this route
         //In that case, the api response is different so I will have to account for that
         for (int i = 0; i < parent.getAdapter().getCount(); i++){
             if (i != position) {
-                RouteUIModel curr = (RouteUIModel) parent.getAdapter().getItem(i);
+                RouteUiModel curr = (RouteUiModel) parent.getAdapter().getItem(i);
                 if (curr.getNumber().equals(entry.getNumber())){
                     multiRoute = true;
                 }
@@ -58,13 +59,18 @@ public class RoutesListActivity extends AppCompatActivity implements AdapterView
 
     @Override
     public void backGroundTaskSuccess(String result) {
-        if (result.equals("Empty")){
-            if (dialog.isShowing())
-                dialog.cancel();
-            this.createDialog();
-        } else{
-            if (dialog.isShowing())
-                dialog.cancel();
+        UiUtils.RouteBackGroundTaskReturnValues inputCase =
+                UiUtils.RouteBackGroundTaskReturnValues.valueOf(result);
+        switch(inputCase){
+            case EMPTY:
+                if (dialog.isShowing())
+                    dialog.cancel();
+                this.createDialog();
+                return;
+            case ROUTES_RETRIEVED:
+                if (dialog.isShowing())
+                    dialog.cancel();
+                return;
         }
     }
 

@@ -4,27 +4,27 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.brettjenken.honourstutorial.DAO.DBStopDao;
-import com.example.brettjenken.honourstutorial.Factory.StopUIModelFactory;
-import com.example.brettjenken.honourstutorial.Stop.StopUIModel;
+import com.example.brettjenken.honourstutorial.Dao.AppDbStopDao;
+import com.example.brettjenken.honourstutorial.Factory.StopUiModelFactory;
+import com.example.brettjenken.honourstutorial.Ui.Stop.StopUiModel;
 
 
 /**
  * Created by Brett on 2/18/2017.
  */
 
-public class DBStopService {
+public class AppDbStopService {
 
-    DBStopDao dbStopDao;
-    StopUIModelFactory stopUIModelFactory;
-    public DBStopService(Context context) {
-        dbStopDao = new DBStopDao(context);
-        stopUIModelFactory = new StopUIModelFactory();
+    AppDbStopDao appDbStopDao;
+    StopUiModelFactory stopUiModelFactory;
+    public AppDbStopService(Context context) {
+        appDbStopDao = new AppDbStopDao(context);
+        stopUiModelFactory = new StopUiModelFactory();
     }
 
-    public void insertRow(SQLiteDatabase db, StopUIModel stop){
+    public void insertRow(SQLiteDatabase db, StopUiModel stop){
         if (stop.getId() != null) {
-            dbStopDao.insertRow(db,
+            appDbStopDao.insertRow(db,
                     stop.getId(),
                     stop.getLocation(),
                     stop.getRoutes(),
@@ -36,27 +36,27 @@ public class DBStopService {
     }
 
     public void deleteRow(SQLiteDatabase db, String stopNumber){
-        dbStopDao.deleteRow(db, stopNumber);
+        appDbStopDao.deleteRow(db, stopNumber);
     }
 
     public void updateAccessedTime(SQLiteDatabase db, String stopNumber){
-        dbStopDao.updateAccessedTime(db, stopNumber, System.currentTimeMillis());
+        appDbStopDao.updateAccessedTime(db, stopNumber, System.currentTimeMillis());
     }
     public Cursor getAllEntries(SQLiteDatabase db){
-        return dbStopDao.getAllEntries(db);
+        return appDbStopDao.getAllEntries(db);
 
     }
 
     public boolean stopInTable(SQLiteDatabase db, String stopNum){
-        return dbStopDao.stopInTable(db, stopNum);
+        return appDbStopDao.stopInTable(db, stopNum);
     }
 
     public SQLiteDatabase getReadableDatabase(){
-        return dbStopDao.getReadableDatabase();
+        return appDbStopDao.getReadableDatabase();
     }
 
     public SQLiteDatabase getWritableDatabase(){
-        return dbStopDao.getWritableDatabase();
+        return appDbStopDao.getWritableDatabase();
     }
 
 }

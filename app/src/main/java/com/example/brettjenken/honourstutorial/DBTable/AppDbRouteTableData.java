@@ -6,7 +6,7 @@ import android.provider.BaseColumns;
  * Created by Brett on 2/11/2017.
  */
 
-public abstract class RouteTableData implements BaseColumns{
+public abstract class AppDbRouteTableData implements BaseColumns{
     public static final String STOP_NUMBER = "stop_number";
     public static final String ROUTE_NUMBER = "route_number";
     public static final String DIRECTION = "direction";

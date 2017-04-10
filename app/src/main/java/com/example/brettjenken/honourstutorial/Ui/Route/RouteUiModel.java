@@ -1,11 +1,11 @@
-package com.example.brettjenken.honourstutorial.Route;
+package com.example.brettjenken.honourstutorial.Ui.Route;
 
 /**
  * Created by Brett on 11/24/2016.
  */
-public class RouteUIModel {
+public class RouteUiModel {
 
-    public RouteUIModel(){
+    public RouteUiModel(){
     }
 
 

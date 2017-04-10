@@ -1,13 +1,12 @@
-package com.example.brettjenken.honourstutorial.Times;
+package com.example.brettjenken.honourstutorial.Ui.Times;
 
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.ListView;
 
-import com.example.brettjenken.honourstutorial.UIBackgroundTaskCallback;
+import com.example.brettjenken.honourstutorial.Ui.UiBackgroundTaskCallback;
 
-import java.util.List;
 import com.example.brettjenken.honourstutorial.R;
 
 
@@ -19,9 +18,9 @@ public class TimesBackgroundTask extends AsyncTask<String, TimeUIModel, String> 
     TimeAdapter timeAdapter;
     Activity activity;
     ListView listView;
-    UIBackgroundTaskCallback callback;
+    UiBackgroundTaskCallback callback;
 
-    TimesBackgroundTask(UIBackgroundTaskCallback callback, Context context) {
+    TimesBackgroundTask(UiBackgroundTaskCallback callback, Context context) {
         this.callback = callback;
         this.context = context;
         this.activity = (Activity)context;

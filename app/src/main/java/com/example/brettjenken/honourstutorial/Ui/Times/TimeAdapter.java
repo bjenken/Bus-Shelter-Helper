@@ -1,4 +1,4 @@
-package com.example.brettjenken.honourstutorial.Times;
+package com.example.brettjenken.honourstutorial.Ui.Times;
 
 import android.content.Context;
 import android.view.LayoutInflater;
