@@ -59,9 +59,9 @@ public class RoutesListActivity extends AppCompatActivity implements AdapterView
 
     @Override
     public void backGroundTaskSuccess(String result) {
-        UiUtils.RouteBackGroundTaskReturnValues inputCase =
+        UiUtils.RouteBackGroundTaskReturnValues returnCase =
                 UiUtils.RouteBackGroundTaskReturnValues.valueOf(result);
-        switch(inputCase){
+        switch(returnCase){
             case EMPTY:
                 if (dialog.isShowing())
                     dialog.cancel();

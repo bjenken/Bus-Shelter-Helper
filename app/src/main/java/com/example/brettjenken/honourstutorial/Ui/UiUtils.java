@@ -15,9 +15,12 @@ public class UiUtils {
     }
 
     public enum StopBackGroundTaskInputValues {
-        GET_ALL_STOPS
+        GET_ALL_STOPS,
+        CHECK_FOR_STOP
     }
 
     public enum StopBackGroundTaskReturnValues {
+        STOPS_RETRIEVED,
+        STOP_FOUND
     }
 }

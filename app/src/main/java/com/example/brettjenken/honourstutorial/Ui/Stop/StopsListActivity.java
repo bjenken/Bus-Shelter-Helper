@@ -12,13 +12,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
+
 import com.example.brettjenken.honourstutorial.R;
 import com.example.brettjenken.honourstutorial.Ui.Route.RoutesListActivity;
 import com.example.brettjenken.honourstutorial.Ui.UiBackgroundTaskCallback;
 import com.example.brettjenken.honourstutorial.Ui.UiUtils;
 
-public class StopsListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, UiBackgroundTaskCallback {
-
+public class StopsListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, UiBackgroundTaskCallback, DialogInterface.OnClickListener {
+    String queryStopCode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,19 +56,7 @@ public class StopsListActivity extends AppCompatActivity implements AdapterView.
         input.setId(R.id.edit_text_stop_num);
         builder.setTitle("Enter StopUiModel ID")
                 .setView(input)
-                .setPositiveButton("View StopUiModel", new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int id){
-                        Dialog d = (Dialog)dialog;
-                        EditText input = (EditText)d.findViewById(R.id.edit_text_stop_num);
-                        String query = input.getText().toString();
-                        //validate it here
-                        //then throw the user over to the appropriate listing
-                        Intent intent = new Intent(StopsListActivity.this, RoutesListActivity.class);
-                        intent.putExtra("EXTRA_STOP_ID", query);
-                        startActivity(intent);
-                    }
-                })
+                .setPositiveButton("View Stop", this)
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
@@ -75,22 +65,39 @@ public class StopsListActivity extends AppCompatActivity implements AdapterView.
         builder.create().show();
         return true;
     }
-
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+        Dialog d = (Dialog)dialog;
+        EditText input = (EditText)d.findViewById(R.id.edit_text_stop_num);
+        this.queryStopCode = input.getText().toString();
+        //validate it here
+        StopsBackgroundTask stopsBackgroundTask = new StopsBackgroundTask(this, this);
+        stopsBackgroundTask.execute(UiUtils.StopBackGroundTaskInputValues.CHECK_FOR_STOP.name(), queryStopCode);
+        //then throw the user over to the appropriate listing
+    }
     @Override
     public void onBackPressed() {
         //avoids the user being sent to the blank MainActivity
-        //hacky
-        //give a quit dialogue or something
     }
 
     @Override
     public void backGroundTaskSuccess(String result) {
-
+        UiUtils.StopBackGroundTaskReturnValues returnCase =
+                UiUtils.StopBackGroundTaskReturnValues.valueOf(result);
+        switch(returnCase){
+            case STOP_FOUND:
+                Intent intent = new Intent(StopsListActivity.this, RoutesListActivity.class);
+                intent.putExtra("EXTRA_STOP_ID", queryStopCode);
+                startActivity(intent);
+                return;
+            case STOPS_RETRIEVED:
+                return;
+        }
     }
 
     @Override
     public void backGroundTaskFailure(Exception e) {
-
+        Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -100,4 +107,6 @@ public class StopsListActivity extends AppCompatActivity implements AdapterView.
         StopsBackgroundTask stopsBackgroundTask = new StopsBackgroundTask(this, this);
         stopsBackgroundTask.execute(UiUtils.StopBackGroundTaskInputValues.GET_ALL_STOPS.name());
     }
+
+
 }

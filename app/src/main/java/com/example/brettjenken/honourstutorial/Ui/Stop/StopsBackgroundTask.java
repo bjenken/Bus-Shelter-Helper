@@ -10,6 +10,7 @@ import android.widget.ListView;
 import com.example.brettjenken.honourstutorial.Factory.StopUiModelFactory;
 import com.example.brettjenken.honourstutorial.R;
 import com.example.brettjenken.honourstutorial.Service.AppDbStopService;
+import com.example.brettjenken.honourstutorial.Service.OctDbService;
 import com.example.brettjenken.honourstutorial.Ui.UiBackgroundTaskCallback;
 import com.example.brettjenken.honourstutorial.Ui.UiUtils;
 
@@ -19,11 +20,11 @@ import com.example.brettjenken.honourstutorial.Ui.UiUtils;
 public class StopsBackgroundTask extends AsyncTask<String, StopUiModel, String> {
     Context context;
     StopAdapter stopAdapter;
-    //RouteAdapter routeAdapter;
     Activity activity;
     ListView listView;
     UiBackgroundTaskCallback callback;
     AppDbStopService appDbStopService;
+    OctDbService octDbService;
     StopUiModelFactory stopUiModelFactory;
     StopsBackgroundTask(UiBackgroundTaskCallback callback, Context context) {
         this.callback = callback;
@@ -31,6 +32,7 @@ public class StopsBackgroundTask extends AsyncTask<String, StopUiModel, String> 
         this.activity = (Activity)context;
         this.stopUiModelFactory = new StopUiModelFactory();
         this.appDbStopService = new AppDbStopService(context);
+        this.octDbService = new OctDbService(context);
     }
     @Override
     protected void onPreExecute() {
@@ -44,6 +46,8 @@ public class StopsBackgroundTask extends AsyncTask<String, StopUiModel, String> 
         switch(inputCase){
             case GET_ALL_STOPS:
                 return this.getAllStops();
+            case CHECK_FOR_STOP:
+                return this.checkForStop(params[1]);
         }
         return null;
     }
@@ -69,7 +73,16 @@ public class StopsBackgroundTask extends AsyncTask<String, StopUiModel, String> 
         while(cursor.moveToNext()){
             publishProgress(stopUiModelFactory.getStopUIModel(cursor));
         }
-        return UiUtils.StopBackGroundTaskInputValues.GET_ALL_STOPS.name();
+        return UiUtils.StopBackGroundTaskReturnValues.STOPS_RETRIEVED.name();
+    }
+
+    private String checkForStop(String stopCode){
+        SQLiteDatabase db = octDbService.getReadableDatabase();
+        boolean check = octDbService.checkForStop(db, stopCode);
+        if (check)
+            return UiUtils.StopBackGroundTaskReturnValues.STOP_FOUND.name();
+        else
+            return "Stop Not Found, Please Try Again";
     }
 
     @Override
@@ -80,15 +93,20 @@ public class StopsBackgroundTask extends AsyncTask<String, StopUiModel, String> 
 
     @Override
     protected void onPostExecute(String result) {
-        UiUtils.StopBackGroundTaskInputValues inputCase =
-                UiUtils.StopBackGroundTaskInputValues.valueOf(result);
-        switch(inputCase){
-            case GET_ALL_STOPS:
-                listView.setAdapter(stopAdapter);
-                callback.backGroundTaskSuccess("");
-                return;
+        try {
+            UiUtils.StopBackGroundTaskReturnValues returnCase =
+                    UiUtils.StopBackGroundTaskReturnValues.valueOf(result);
+            switch (returnCase) {
+                case STOPS_RETRIEVED:
+                    listView.setAdapter(stopAdapter);
+                    callback.backGroundTaskSuccess(UiUtils.StopBackGroundTaskReturnValues.STOPS_RETRIEVED.name());
+                    return;
+                case STOP_FOUND:
+                    callback.backGroundTaskSuccess(UiUtils.StopBackGroundTaskReturnValues.STOP_FOUND.name());
+                    return;
+            }
+        } catch (Exception e) {
+            callback.backGroundTaskFailure(new Exception(result));
         }
-
-        callback.backGroundTaskFailure(new Exception(result));
     }
 }
