@@ -1,6 +1,7 @@
 package com.example.brettjenken.honourstutorial.Ui.Stop;
 
 import android.app.Activity;
+import android.app.Service;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,6 +12,7 @@ import com.example.brettjenken.honourstutorial.Factory.StopUiModelFactory;
 import com.example.brettjenken.honourstutorial.R;
 import com.example.brettjenken.honourstutorial.Service.AppDbStopService;
 import com.example.brettjenken.honourstutorial.Service.OctDbService;
+import com.example.brettjenken.honourstutorial.Service.ServiceCallback;
 import com.example.brettjenken.honourstutorial.Ui.UiBackgroundTaskCallback;
 import com.example.brettjenken.honourstutorial.Ui.UiUtils;
 
@@ -26,13 +28,13 @@ public class StopsBackgroundTask extends AsyncTask<String, StopUiModel, String> 
     AppDbStopService appDbStopService;
     OctDbService octDbService;
     StopUiModelFactory stopUiModelFactory;
-    StopsBackgroundTask(UiBackgroundTaskCallback callback, Context context) {
+    StopsBackgroundTask(UiBackgroundTaskCallback callback, Context context, ServiceCallback serviceCallback) {
         this.callback = callback;
         this.context = context;
         this.activity = (Activity)context;
         this.stopUiModelFactory = new StopUiModelFactory();
         this.appDbStopService = new AppDbStopService(context);
-        this.octDbService = new OctDbService(context);
+        this.octDbService = new OctDbService(context, serviceCallback);
     }
     @Override
     protected void onPreExecute() {

@@ -9,7 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.util.Log;
 
-import com.example.brettjenken.honourstutorial.OctTableData.OctDbStopTableData;
+import com.example.brettjenken.honourstutorial.OctDbTableData.OctDbRouteTableData;
+import com.example.brettjenken.honourstutorial.OctDbTableData.OctDbStopTableData;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -28,6 +29,10 @@ import java.nio.channels.FileChannel;
 public class OctDbStopDao extends SQLiteOpenHelper {
     public static final int databaseVersion = 1;
     private Context context;
+    private OctDbRouteDao octDbRouteDao;
+    private OctDbStopTimeDao octDbStopTimeDao;
+    private OctDbTripDao octDbTripDao;
+    private SQLiteDatabase db;
     public String createQuery = "CREATE TABLE " + OctDbStopTableData.TABLE_NAME
             + "("
             + OctDbStopTableData.STOP_ID + " TEXT, "
@@ -41,20 +46,37 @@ public class OctDbStopDao extends SQLiteOpenHelper {
             + OctDbStopTableData.LOCATION_TYPE + " TEXT"
             + ");";
 
+
     public OctDbStopDao(Context context) {
         super(context, OctDbStopTableData.DATABASE_NAME, null, databaseVersion);
         this.context = context;
+        db = getWritableDatabase();
     }
     @Override
-    public void onCreate(SQLiteDatabase db) {
-        this.importFromCSV(db);
+    public void onCreate(SQLiteDatabase dbInput) {
+        initializeAllTables(dbInput);
+        //importFromCSV(dbInput);
         Log.d("OC DB Stop Service", "Table Created");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        this.importFromCSV(db);
+        //initializeAllTables(db);
         Log.d("OC DB Stop Service", "Table Upgraded");
+    }
+
+    private void initializeAllTables(SQLiteDatabase db){
+        this.importFromCSV(db);
+        Log.d("OC DB Stop Service", "Stop Table Created");
+        octDbRouteDao = new OctDbRouteDao(context);
+        octDbRouteDao.importFromCSV(db);
+        Log.d("OC DB Stop Service", "Route Table Created");
+        octDbStopTimeDao = new OctDbStopTimeDao(context);
+        octDbStopTimeDao.importFromCSV(db);
+        Log.d("OC DB Stop Service", "Stop Time Table Created");
+        octDbTripDao = new OctDbTripDao(context);
+        octDbTripDao.importFromCSV(db);
+        Log.d("OC DB Stop Service", "Trip Table Created");
     }
 
     public Cursor getAllStops(SQLiteDatabase db){

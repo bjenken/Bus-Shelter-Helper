@@ -1,4 +1,4 @@
-package com.example.brettjenken.honourstutorial.DBTable;
+package com.example.brettjenken.honourstutorial.AppDbTableData;
 
 import android.provider.BaseColumns;
 

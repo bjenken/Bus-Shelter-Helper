@@ -1,4 +1,4 @@
-package com.example.brettjenken.honourstutorial.OctTableData;
+package com.example.brettjenken.honourstutorial.OctDbTableData;
 
 import android.provider.BaseColumns;
 

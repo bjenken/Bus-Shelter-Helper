@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.util.Log;
 
-import com.example.brettjenken.honourstutorial.DBTable.AppDbRouteTableData;
+import com.example.brettjenken.honourstutorial.AppDbTableData.AppDbRouteTableData;
 
 import java.io.File;
 import java.io.FileInputStream;

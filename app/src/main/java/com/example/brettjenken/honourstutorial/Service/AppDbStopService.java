@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.brettjenken.honourstutorial.Dao.AppDbStopDao;
 import com.example.brettjenken.honourstutorial.Factory.StopUiModelFactory;
+import com.example.brettjenken.honourstutorial.ServiceModel.ServiceStopModel;
 import com.example.brettjenken.honourstutorial.Ui.Stop.StopUiModel;
 
 
@@ -22,7 +23,8 @@ public class AppDbStopService {
         stopUiModelFactory = new StopUiModelFactory();
     }
 
-    public void insertRow(SQLiteDatabase db, StopUiModel stop){
+    public void insertRow(SQLiteDatabase db, ServiceStopModel stopInput){
+        StopUiModel stop = stopUiModelFactory.getStopUIModel(stopInput);
         if (stop.getId() != null) {
             appDbStopDao.insertRow(db,
                     stop.getId(),

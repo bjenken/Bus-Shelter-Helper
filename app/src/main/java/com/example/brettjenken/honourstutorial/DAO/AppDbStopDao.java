@@ -8,8 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.util.Log;
 
-import com.example.brettjenken.honourstutorial.DBTable.AppDbRouteTableData;
-import com.example.brettjenken.honourstutorial.DBTable.AppDbStopTableData;
+import com.example.brettjenken.honourstutorial.AppDbTableData.AppDbRouteTableData;
+import com.example.brettjenken.honourstutorial.AppDbTableData.AppDbStopTableData;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,6 +24,7 @@ import java.nio.channels.FileChannel;
 
 public class AppDbStopDao extends SQLiteOpenHelper {
     public static final int databaseVersion = 1;
+    private SQLiteDatabase db;
     public String createQuery = "CREATE TABLE " + AppDbStopTableData.TABLE_NAME
             + "("
             + AppDbStopTableData.STOP_NUMBER + " TEXT, "
@@ -39,6 +40,7 @@ public class AppDbStopDao extends SQLiteOpenHelper {
             + ");";
     public AppDbStopDao(Context context) {
         super(context, AppDbStopTableData.DATABASE_NAME, null, databaseVersion);
+        db = getWritableDatabase();
         //this.getWritableDatabase().execSQL("DROP TABLE IF EXISTS '" + AppDbStopTableData.TABLE_NAME + "'");
         //this.getWritableDatabase().execSQL(createQuery);
     }

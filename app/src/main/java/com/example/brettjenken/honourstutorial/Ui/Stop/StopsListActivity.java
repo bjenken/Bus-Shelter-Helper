@@ -1,6 +1,7 @@
 package com.example.brettjenken.honourstutorial.Ui.Stop;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,12 +16,15 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.brettjenken.honourstutorial.R;
+import com.example.brettjenken.honourstutorial.Service.ServiceCallback;
+import com.example.brettjenken.honourstutorial.ServiceModel.ServiceStopModel;
 import com.example.brettjenken.honourstutorial.Ui.Route.RoutesListActivity;
 import com.example.brettjenken.honourstutorial.Ui.UiBackgroundTaskCallback;
 import com.example.brettjenken.honourstutorial.Ui.UiUtils;
 
-public class StopsListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, UiBackgroundTaskCallback, DialogInterface.OnClickListener {
+public class StopsListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, UiBackgroundTaskCallback, DialogInterface.OnClickListener, ServiceCallback {
     String queryStopCode;
+    ProgressDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +39,9 @@ public class StopsListActivity extends AppCompatActivity implements AdapterView.
         });
         ListView lv = (ListView) findViewById(R.id.stopsListListView);
         lv.setOnItemClickListener(StopsListActivity.this);
-
-        StopsBackgroundTask stopsBackgroundTask = new StopsBackgroundTask(this, this);
+        dialog = ProgressDialog.show(StopsListActivity.this, "",
+                "Loading assets for first use. This may take some time...", true);
+        StopsBackgroundTask stopsBackgroundTask = new StopsBackgroundTask(this, this, this);
         stopsBackgroundTask.execute(UiUtils.StopBackGroundTaskInputValues.GET_ALL_STOPS.name());
 
     }
@@ -71,7 +76,7 @@ public class StopsListActivity extends AppCompatActivity implements AdapterView.
         EditText input = (EditText)d.findViewById(R.id.edit_text_stop_num);
         this.queryStopCode = input.getText().toString();
         //validate it here
-        StopsBackgroundTask stopsBackgroundTask = new StopsBackgroundTask(this, this);
+        StopsBackgroundTask stopsBackgroundTask = new StopsBackgroundTask(this, this, this);
         stopsBackgroundTask.execute(UiUtils.StopBackGroundTaskInputValues.CHECK_FOR_STOP.name(), queryStopCode);
         //then throw the user over to the appropriate listing
     }
@@ -86,17 +91,23 @@ public class StopsListActivity extends AppCompatActivity implements AdapterView.
                 UiUtils.StopBackGroundTaskReturnValues.valueOf(result);
         switch(returnCase){
             case STOP_FOUND:
+                if (dialog.isShowing())
+                    dialog.cancel();
                 Intent intent = new Intent(StopsListActivity.this, RoutesListActivity.class);
                 intent.putExtra("EXTRA_STOP_ID", queryStopCode);
                 startActivity(intent);
                 return;
             case STOPS_RETRIEVED:
+                if (dialog.isShowing())
+                    dialog.cancel();
                 return;
         }
     }
 
     @Override
     public void backGroundTaskFailure(Exception e) {
+        if (dialog.isShowing())
+            dialog.cancel();
         Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
     }
 
@@ -104,9 +115,20 @@ public class StopsListActivity extends AppCompatActivity implements AdapterView.
     public void onRestart() {
         super.onRestart();
         //When BACK BUTTON is pressed, the activity on the stack is restarted
-        StopsBackgroundTask stopsBackgroundTask = new StopsBackgroundTask(this, this);
+        StopsBackgroundTask stopsBackgroundTask = new StopsBackgroundTask(this, this, this);
         stopsBackgroundTask.execute(UiUtils.StopBackGroundTaskInputValues.GET_ALL_STOPS.name());
     }
 
 
+    @Override
+    public void serviceSuccess(ServiceStopModel stop) {
+        if (dialog.isShowing())
+            dialog.cancel();
+    }
+
+    @Override
+    public void serviceFailure(Exception e) {
+        if (dialog.isShowing())
+            dialog.cancel();
+    }
 }

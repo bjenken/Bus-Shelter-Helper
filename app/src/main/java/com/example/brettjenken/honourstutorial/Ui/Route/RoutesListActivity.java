@@ -10,13 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.brettjenken.honourstutorial.R;
+import com.example.brettjenken.honourstutorial.Service.ServiceCallback;
+import com.example.brettjenken.honourstutorial.ServiceModel.ServiceStopModel;
 import com.example.brettjenken.honourstutorial.Ui.Times.TimesListActivity;
 import com.example.brettjenken.honourstutorial.Ui.UiBackgroundTaskCallback;
 import com.example.brettjenken.honourstutorial.Ui.UiUtils;
 
-public class RoutesListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, UiBackgroundTaskCallback {
+public class RoutesListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, UiBackgroundTaskCallback, ServiceCallback {
     ProgressDialog dialog;
     String stopId;
     @Override
@@ -27,10 +30,10 @@ public class RoutesListActivity extends AppCompatActivity implements AdapterView
         lv.setOnItemClickListener(RoutesListActivity.this);
         stopId = getIntent().getStringExtra("EXTRA_STOP_ID");
         //check db for stop
-        RoutesBackgroundTask routesBackgroundTask = new RoutesBackgroundTask(this, this);
+        RoutesBackgroundTask routesBackgroundTask = new RoutesBackgroundTask(this, this, this, null);
         dialog = ProgressDialog.show(RoutesListActivity.this, "",
                 "Loading. Please wait...", true);
-        routesBackgroundTask.execute(UiUtils.RouteBackGroundTaskInputValues.GET_ROUTES_FROM_APP_DB.name());
+        routesBackgroundTask.execute(UiUtils.RouteBackGroundTaskInputValues.CHECK_APP_DB_FOR_STOP.name(), stopId);
 
     }
 
@@ -67,10 +70,24 @@ public class RoutesListActivity extends AppCompatActivity implements AdapterView
                     dialog.cancel();
                 this.createDialog();
                 return;
-            case ROUTES_RETRIEVED:
+            case ROUTES_RETRIEVED_FROM_APP_DB:
                 if (dialog.isShowing())
                     dialog.cancel();
                 return;
+            case ROUTES_RETRIEVED_FROM_STOP_OBJECT:
+                if (dialog.isShowing())
+                    dialog.cancel();
+                return;
+            case STOP_FOUND:
+                RoutesBackgroundTask updateStop = new RoutesBackgroundTask(this, this, this, null);
+                updateStop.execute(UiUtils.RouteBackGroundTaskInputValues.UPDATE_STOP_IN_APP_DB.name(), stopId);
+                RoutesBackgroundTask routesBackgroundTask = new RoutesBackgroundTask(this, this, this, null);
+                routesBackgroundTask.execute(UiUtils.RouteBackGroundTaskInputValues.GET_ROUTES_FROM_APP_DB.name(), stopId);
+                break;
+            case STOP_NOT_FOUND:
+                RoutesBackgroundTask getStop = new RoutesBackgroundTask(this, this, this, null);
+                getStop.execute(UiUtils.RouteBackGroundTaskInputValues.GET_STOP_FROM_OC_DB.name(), stopId);
+                break;
         }
     }
 
@@ -97,4 +114,17 @@ public class RoutesListActivity extends AppCompatActivity implements AdapterView
         super.onBackPressed();
     }
 
+    @Override
+    public void serviceSuccess(ServiceStopModel stop) {
+        RoutesBackgroundTask addStopBackgroundTask = new RoutesBackgroundTask(this, this, this, stop);
+        addStopBackgroundTask.execute(UiUtils.RouteBackGroundTaskInputValues.ADD_STOP_TO_APP_DB.name());
+        RoutesBackgroundTask routesBackgroundTask = new RoutesBackgroundTask(this, this, this, stop);
+        routesBackgroundTask.execute(UiUtils.RouteBackGroundTaskInputValues.GET_ROUTES_FROM_STOP_OBJECT.name());
+    }
+
+    @Override
+    public void serviceFailure(Exception e) {
+        dialog.cancel();
+        Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+    }
 }
