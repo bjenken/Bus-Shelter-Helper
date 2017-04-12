@@ -17,6 +17,8 @@ import com.example.brettjenken.honourstutorial.ServiceModel.ServiceStopModel;
 import com.example.brettjenken.honourstutorial.Ui.UiBackgroundTaskCallback;
 import com.example.brettjenken.honourstutorial.Ui.UiUtils;
 
+import java.util.Collections;
+
 /**
  * Created by Brett on 11/24/2016.
  */
@@ -48,8 +50,8 @@ public class RoutesBackgroundTask extends AsyncTask<String, RouteUiModel, String
 
     @Override
     protected String doInBackground(String... params) {
-        UiUtils.RouteBackGroundTaskInputValues inputCase =
-                UiUtils.RouteBackGroundTaskInputValues.valueOf(params[0]);
+        UiUtils.RouteBackgroundTaskInputValues inputCase =
+                UiUtils.RouteBackgroundTaskInputValues.valueOf(params[0]);
         switch(inputCase){
             case GET_ROUTES_FROM_APP_DB:
                 return this.getRoutesFromAppDb(params[1]);
@@ -71,11 +73,11 @@ public class RoutesBackgroundTask extends AsyncTask<String, RouteUiModel, String
         SQLiteDatabase db = appDbStopService.getReadableDatabase();
         boolean check = appDbStopService.stopInTable(db, stopId);
         if (check){
-            callback.backGroundTaskSuccess(UiUtils.RouteBackGroundTaskReturnValues.STOP_FOUND.name());
+            callback.backGroundTaskSuccess(UiUtils.RouteBackgroundTaskReturnValues.STOP_FOUND.name());
         } else {
-            callback.backGroundTaskSuccess(UiUtils.RouteBackGroundTaskReturnValues.STOP_NOT_FOUND.name());
+            callback.backGroundTaskSuccess(UiUtils.RouteBackgroundTaskReturnValues.STOP_NOT_FOUND.name());
         }
-        return UiUtils.RouteBackGroundTaskReturnValues.APP_DB_CHECKED_FOR_STOP.name();
+        return UiUtils.RouteBackgroundTaskReturnValues.APP_DB_CHECKED_FOR_STOP.name();
     }
 
     private String getRoutesFromAppDb(String stopNum){
@@ -87,18 +89,18 @@ public class RoutesBackgroundTask extends AsyncTask<String, RouteUiModel, String
         }
         routeAdapter = new RouteAdapter(context, R.layout.display_route_row_layout);
 
-        return UiUtils.RouteBackGroundTaskReturnValues.ROUTES_RETRIEVED_FROM_APP_DB.name();
+        return UiUtils.RouteBackgroundTaskReturnValues.ROUTES_RETRIEVED_FROM_APP_DB.name();
     }
 
     private String updateStopInAppDb(String stopNum){
         SQLiteDatabase db = appDbStopService.getWritableDatabase();
         appDbStopService.updateAccessedTime(db, stopNum);
-        return UiUtils.RouteBackGroundTaskReturnValues.STOP_UPDATED_IN_APP_DB.name();
+        return UiUtils.RouteBackgroundTaskReturnValues.STOP_UPDATED_IN_APP_DB.name();
     }
 
     private String getStopFromOcDb(String stopId){
         octDbService.getStopWithRoutes(octDbService.getReadableDatabase(), stopId);
-        return UiUtils.RouteBackGroundTaskReturnValues.STOP_RETRIEVED_FROM_OC_DB.name();
+        return UiUtils.RouteBackgroundTaskReturnValues.STOP_RETRIEVED_FROM_OC_DB.name();
     }
 
     private String addStopToAppDb(){
@@ -106,7 +108,7 @@ public class RoutesBackgroundTask extends AsyncTask<String, RouteUiModel, String
         //delete any row that already exists with that stop number
         appDbStopService.deleteRow(db, serviceStopModel.getStopNo());
         appDbStopService.insertRow(db, serviceStopModel);
-        return UiUtils.RouteBackGroundTaskReturnValues.STOP_ADDED_TO_APP_DB.name();
+        return UiUtils.RouteBackgroundTaskReturnValues.STOP_ADDED_TO_APP_DB.name();
     }
 
     private String getRoutesFromStopObject(){
@@ -122,7 +124,7 @@ public class RoutesBackgroundTask extends AsyncTask<String, RouteUiModel, String
             publishProgress(route);
         }
 
-        return UiUtils.RouteBackGroundTaskReturnValues.ROUTES_RETRIEVED_FROM_STOP_OBJECT.name();
+        return UiUtils.RouteBackgroundTaskReturnValues.ROUTES_RETRIEVED_FROM_STOP_OBJECT.name();
     }
 
     @Override
@@ -132,24 +134,24 @@ public class RoutesBackgroundTask extends AsyncTask<String, RouteUiModel, String
 
     @Override
     protected void onPostExecute(String result) {
-        UiUtils.RouteBackGroundTaskReturnValues inputCase =
-                UiUtils.RouteBackGroundTaskReturnValues.valueOf(result);
+        UiUtils.RouteBackgroundTaskReturnValues inputCase =
+                UiUtils.RouteBackgroundTaskReturnValues.valueOf(result);
         try {
             switch (inputCase) {
                 case ROUTES_RETRIEVED_FROM_APP_DB:
                     if (routeAdapter.getCount() > 0) {
                         listView.setAdapter(routeAdapter);
-                        callback.backGroundTaskSuccess(UiUtils.RouteBackGroundTaskReturnValues.ROUTES_RETRIEVED_FROM_APP_DB.name());
+                        callback.backGroundTaskSuccess(UiUtils.RouteBackgroundTaskReturnValues.ROUTES_RETRIEVED_FROM_APP_DB.name());
                     } else {
-                        callback.backGroundTaskSuccess(UiUtils.RouteBackGroundTaskReturnValues.EMPTY.name());
+                        callback.backGroundTaskSuccess(UiUtils.RouteBackgroundTaskReturnValues.EMPTY.name());
                     }
                     return;
                 case ROUTES_RETRIEVED_FROM_STOP_OBJECT:
                     if (routeAdapter.getCount() > 0) {
                         listView.setAdapter(routeAdapter);
-                        callback.backGroundTaskSuccess(UiUtils.RouteBackGroundTaskReturnValues.ROUTES_RETRIEVED_FROM_STOP_OBJECT.name());
+                        callback.backGroundTaskSuccess(UiUtils.RouteBackgroundTaskReturnValues.ROUTES_RETRIEVED_FROM_STOP_OBJECT.name());
                     } else {
-                        callback.backGroundTaskSuccess(UiUtils.RouteBackGroundTaskReturnValues.EMPTY.name());
+                        callback.backGroundTaskSuccess(UiUtils.RouteBackgroundTaskReturnValues.EMPTY.name());
                     }
                     return;
                 case STOP_UPDATED_IN_APP_DB:

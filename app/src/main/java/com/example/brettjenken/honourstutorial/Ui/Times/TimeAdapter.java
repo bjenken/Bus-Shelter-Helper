@@ -21,7 +21,7 @@ public class TimeAdapter extends ArrayAdapter{
         super(context, resource);
     }
 
-    public void add(TimeUIModel time) {
+    public void add(TimeUiModel time) {
         list.add(time);
         super.add(time);
     }
@@ -50,7 +50,7 @@ public class TimeAdapter extends ArrayAdapter{
         }else {
             timeHolder = (TimeHolder)row.getTag();
         }
-        TimeUIModel time = (TimeUIModel)getItem(position);
+        TimeUiModel time = (TimeUiModel)getItem(position);
         timeHolder.txTime.setText(time.getTime());
         timeHolder.txDest.setText(time.getDestination());
 

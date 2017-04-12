@@ -19,17 +19,32 @@ public class ServiceRouteModelFactory {
         this.serviceTripModelFactory = new ServiceTripModelFactory();
     }
 
-    public ServiceRouteModel getRouteAPIModel(){
+    public ServiceRouteModel getServiceRouteModel(){
         return new ServiceRouteModel();
     }
 
 
     public ServiceRouteModel getRoutesForStop(OctDbTripModel trip, OctDbRouteModel route){
-        ServiceRouteModel output = this.getRouteAPIModel();
+        ServiceRouteModel output = this.getServiceRouteModel();
         output.setRouteNo(Integer.parseInt(route.getRouteShortName()));
         output.setDirectionId(Integer.parseInt(trip.getDirection()));
         output.setRouteHeading(trip.getTripHeadsign());
         output.setDirection(trip.getTripHeadsign());
+        return output;
+    }
+
+    public ServiceRouteModel getTripsForStop(JSONObject data){
+        ServiceRouteModel output = this.getServiceRouteModel();
+        try {
+            JSONArray jsonTrips = data.optJSONObject("Trips").getJSONArray("Trip");
+            if (jsonTrips != null) {
+                for (int i = 0; i < jsonTrips.length(); i++) {
+                    output.addTrip(serviceTripModelFactory.getTripAPIModel(jsonTrips.getJSONObject(i)));
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return output;
     }
 }

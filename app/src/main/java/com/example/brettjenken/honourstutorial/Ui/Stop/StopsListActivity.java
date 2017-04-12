@@ -42,7 +42,7 @@ public class StopsListActivity extends AppCompatActivity implements AdapterView.
         dialog = ProgressDialog.show(StopsListActivity.this, "",
                 "Loading assets for first use. This may take some time...", true);
         StopsBackgroundTask stopsBackgroundTask = new StopsBackgroundTask(this, this, this);
-        stopsBackgroundTask.execute(UiUtils.StopBackGroundTaskInputValues.GET_ALL_STOPS.name());
+        stopsBackgroundTask.execute(UiUtils.StopBackgroundTaskInputValues.GET_ALL_STOPS.name());
 
     }
 
@@ -59,7 +59,7 @@ public class StopsListActivity extends AppCompatActivity implements AdapterView.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         EditText input = new EditText(this);
         input.setId(R.id.edit_text_stop_num);
-        builder.setTitle("Enter StopUiModel ID")
+        builder.setTitle("Enter Stop ID")
                 .setView(input)
                 .setPositiveButton("View Stop", this)
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -77,7 +77,7 @@ public class StopsListActivity extends AppCompatActivity implements AdapterView.
         this.queryStopCode = input.getText().toString();
         //validate it here
         StopsBackgroundTask stopsBackgroundTask = new StopsBackgroundTask(this, this, this);
-        stopsBackgroundTask.execute(UiUtils.StopBackGroundTaskInputValues.CHECK_FOR_STOP.name(), queryStopCode);
+        stopsBackgroundTask.execute(UiUtils.StopBackgroundTaskInputValues.CHECK_FOR_STOP.name(), queryStopCode);
         //then throw the user over to the appropriate listing
     }
     @Override
@@ -87,8 +87,8 @@ public class StopsListActivity extends AppCompatActivity implements AdapterView.
 
     @Override
     public void backGroundTaskSuccess(String result) {
-        UiUtils.StopBackGroundTaskReturnValues returnCase =
-                UiUtils.StopBackGroundTaskReturnValues.valueOf(result);
+        UiUtils.StopBackgroundTaskReturnValues returnCase =
+                UiUtils.StopBackgroundTaskReturnValues.valueOf(result);
         switch(returnCase){
             case STOP_FOUND:
                 if (dialog.isShowing())
@@ -116,7 +116,7 @@ public class StopsListActivity extends AppCompatActivity implements AdapterView.
         super.onRestart();
         //When BACK BUTTON is pressed, the activity on the stack is restarted
         StopsBackgroundTask stopsBackgroundTask = new StopsBackgroundTask(this, this, this);
-        stopsBackgroundTask.execute(UiUtils.StopBackGroundTaskInputValues.GET_ALL_STOPS.name());
+        stopsBackgroundTask.execute(UiUtils.StopBackgroundTaskInputValues.GET_ALL_STOPS.name());
     }
 
 

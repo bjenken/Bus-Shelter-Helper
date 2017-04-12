@@ -55,13 +55,12 @@ public class OctDbStopDao extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase dbInput) {
         initializeAllTables(dbInput);
-        //importFromCSV(dbInput);
         Log.d("OC DB Stop Service", "Table Created");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        //initializeAllTables(db);
+        initializeAllTables(db);
         Log.d("OC DB Stop Service", "Table Upgraded");
     }
 
@@ -79,20 +78,6 @@ public class OctDbStopDao extends SQLiteOpenHelper {
         Log.d("OC DB Stop Service", "Trip Table Created");
     }
 
-    public Cursor getAllStops(SQLiteDatabase db){
-        String[] projections = {
-                OctDbStopTableData.STOP_ID,
-                OctDbStopTableData.STOP_CODE,
-                OctDbStopTableData.STOP_NAME
-        };
-        Cursor cursor = db.query(
-                OctDbStopTableData.TABLE_NAME,
-                projections,
-                null,null,null,null, null);
-        Log.d("Oct DB Stop Service", "Entries Retrieved");
-
-        return cursor;
-    }
 
     public Cursor getStop(SQLiteDatabase db, String stopNum){
         Cursor cursor = db.rawQuery(
@@ -149,31 +134,6 @@ public class OctDbStopDao extends SQLiteOpenHelper {
         db.setTransactionSuccessful();
         db.endTransaction();
 
-        try {
-            this.writeToSD();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
-    //for Debug purposes
-    private void writeToSD() throws IOException {
-        File sd = Environment.getExternalStorageDirectory();
-
-        if (sd.canWrite()) {
-            String currentDBPath = OctDbStopTableData.DATABASE_NAME;
-            String backupDBPath = "ocDBBackup.db";
-            File currentDB = new File("/data/data/brettjenken.busshelterhelper/databases/", currentDBPath);
-            File backupDB = new File(sd, backupDBPath);
-
-            if (currentDB.exists()) {
-                FileChannel src = new FileInputStream(currentDB).getChannel();
-                FileChannel dst = new FileOutputStream(backupDB).getChannel();
-                dst.transferFrom(src, 0, src.size());
-                src.close();
-                dst.close();
-            }
-        }
-    }
 }

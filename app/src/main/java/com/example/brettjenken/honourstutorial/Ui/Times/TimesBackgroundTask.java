@@ -5,25 +5,35 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.ListView;
 
+import com.example.brettjenken.honourstutorial.Factory.TimeUiModelFactory;
+import com.example.brettjenken.honourstutorial.ServiceModel.ServiceRouteModel;
+import com.example.brettjenken.honourstutorial.ServiceModel.ServiceStopModel;
+import com.example.brettjenken.honourstutorial.ServiceModel.ServiceTripModel;
 import com.example.brettjenken.honourstutorial.Ui.UiBackgroundTaskCallback;
 
 import com.example.brettjenken.honourstutorial.R;
+import com.example.brettjenken.honourstutorial.Ui.UiUtils;
+
+import java.util.List;
 
 
 /**
  * Created by Brett on 11/24/2016.
  */
-public class TimesBackgroundTask extends AsyncTask<String, TimeUIModel, String> {
+public class TimesBackgroundTask extends AsyncTask<String, TimeUiModel, String> {
     Context context;
     TimeAdapter timeAdapter;
     Activity activity;
     ListView listView;
     UiBackgroundTaskCallback callback;
-
-    TimesBackgroundTask(UiBackgroundTaskCallback callback, Context context) {
+    ServiceStopModel serviceStopModel;
+    TimeUiModelFactory timeUiModelFactory;
+    TimesBackgroundTask(UiBackgroundTaskCallback callback, Context context, ServiceStopModel stop) {
         this.callback = callback;
         this.context = context;
         this.activity = (Activity)context;
+        this.serviceStopModel = stop;
+        this.timeUiModelFactory = new TimeUiModelFactory();
     }
     @Override
     protected void onPreExecute() {
@@ -32,38 +42,57 @@ public class TimesBackgroundTask extends AsyncTask<String, TimeUIModel, String> 
 
     @Override
     protected String doInBackground(String... params) {
-        if (params[0] == "get_all_times") {
-            listView = (ListView) activity.findViewById(R.id.timesListListView);
-            String timeStr, destination;
-            timeAdapter = new TimeAdapter(context, R.layout.display_time_row_layout);
-            String[] times = {"12:34", "2:23"};
-            String[] locations = {"Billings Bridge", "South Keys"};
-            for (int i = 0; i < 2; i++) {
-                TimeUIModel time = new TimeUIModel(times[i], locations[i]);
-                publishProgress(time);
-            }
-
-            return "get_all_times";
+        UiUtils.TimesBackgroundTaskInputValues inputCase =
+                UiUtils.TimesBackgroundTaskInputValues.valueOf(params[0]);
+        switch(inputCase){
+            case GET_ALL_TIMES:
+                return getAllTimes();
         }
         return null;
     }
 
+    private String getAllTimes(){
+        listView = (ListView) activity.findViewById(R.id.timesListListView);
+        String timeStr, destination;
+        timeAdapter = new TimeAdapter(context, R.layout.display_time_row_layout);
+
+        ServiceRouteModel stopRoute;
+        if (serviceStopModel.getRoutes().size() > 0)
+            stopRoute = serviceStopModel.getRoutes().get(0);
+        else
+            return UiUtils.TimesBackgroundTaskReturnValues.EMPTY.name();
+        List<ServiceTripModel> stopTrips = stopRoute.getTrips();
+        for (int i = 0; i < stopTrips.size(); i++) {
+            publishProgress(timeUiModelFactory.getTimeUiModel(stopTrips.get(i)));
+        }
+
+        return UiUtils.TimesBackgroundTaskReturnValues.TIMES_RETRIEVED.name();
+    }
+
 
     @Override
-    protected void onProgressUpdate(TimeUIModel... values) {
+    protected void onProgressUpdate(TimeUiModel... values) {
         timeAdapter.add(values[0]);
     }
 
     @Override
     protected void onPostExecute(String result) {
-        if(result.equals("get_all_times")){
-            if (timeAdapter.getCount() > 0) {
-                listView.setAdapter(timeAdapter);
-                callback.backGroundTaskSuccess("");
+        UiUtils.TimesBackgroundTaskReturnValues resultCase =
+                UiUtils.TimesBackgroundTaskReturnValues.valueOf(result);
+        try{
+            switch(resultCase){
+                case TIMES_RETRIEVED:
+                    if (timeAdapter.getCount() > 0) {
+                        listView.setAdapter(timeAdapter);
+                        callback.backGroundTaskSuccess(UiUtils.TimesBackgroundTaskReturnValues.TIMES_RETRIEVED.name());
+                    }
+                    return;
+                case EMPTY:
+                    callback.backGroundTaskSuccess(UiUtils.TimesBackgroundTaskReturnValues.EMPTY.name());
+                    return;
             }
-            else
-                callback.backGroundTaskSuccess("Empty");
-        }else
-           callback.backGroundTaskFailure(new Exception(result));
+        } catch(Exception e){
+            callback.backGroundTaskFailure(new Exception(result));
+        }
     }
 }

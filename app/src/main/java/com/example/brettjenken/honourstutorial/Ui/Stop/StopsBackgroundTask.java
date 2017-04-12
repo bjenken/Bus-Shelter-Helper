@@ -1,7 +1,6 @@
 package com.example.brettjenken.honourstutorial.Ui.Stop;
 
 import android.app.Activity;
-import android.app.Service;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -43,8 +42,8 @@ public class StopsBackgroundTask extends AsyncTask<String, StopUiModel, String> 
 
     @Override
     protected String doInBackground(String... params) {
-        UiUtils.StopBackGroundTaskInputValues inputCase =
-                UiUtils.StopBackGroundTaskInputValues.valueOf(params[0]);
+        UiUtils.StopBackgroundTaskInputValues inputCase =
+                UiUtils.StopBackgroundTaskInputValues.valueOf(params[0]);
         switch(inputCase){
             case GET_ALL_STOPS:
                 return this.getAllStops();
@@ -75,14 +74,14 @@ public class StopsBackgroundTask extends AsyncTask<String, StopUiModel, String> 
         while(cursor.moveToNext()){
             publishProgress(stopUiModelFactory.getStopUIModel(cursor));
         }
-        return UiUtils.StopBackGroundTaskReturnValues.STOPS_RETRIEVED.name();
+        return UiUtils.StopBackgroundTaskReturnValues.STOPS_RETRIEVED.name();
     }
 
     private String checkForStop(String stopCode){
         SQLiteDatabase db = octDbService.getReadableDatabase();
         boolean check = octDbService.checkForStop(db, stopCode);
         if (check)
-            return UiUtils.StopBackGroundTaskReturnValues.STOP_FOUND.name();
+            return UiUtils.StopBackgroundTaskReturnValues.STOP_FOUND.name();
         else
             return "Stop Not Found, Please Try Again";
     }
@@ -96,15 +95,15 @@ public class StopsBackgroundTask extends AsyncTask<String, StopUiModel, String> 
     @Override
     protected void onPostExecute(String result) {
         try {
-            UiUtils.StopBackGroundTaskReturnValues returnCase =
-                    UiUtils.StopBackGroundTaskReturnValues.valueOf(result);
+            UiUtils.StopBackgroundTaskReturnValues returnCase =
+                    UiUtils.StopBackgroundTaskReturnValues.valueOf(result);
             switch (returnCase) {
                 case STOPS_RETRIEVED:
                     listView.setAdapter(stopAdapter);
-                    callback.backGroundTaskSuccess(UiUtils.StopBackGroundTaskReturnValues.STOPS_RETRIEVED.name());
+                    callback.backGroundTaskSuccess(UiUtils.StopBackgroundTaskReturnValues.STOPS_RETRIEVED.name());
                     return;
                 case STOP_FOUND:
-                    callback.backGroundTaskSuccess(UiUtils.StopBackGroundTaskReturnValues.STOP_FOUND.name());
+                    callback.backGroundTaskSuccess(UiUtils.StopBackgroundTaskReturnValues.STOP_FOUND.name());
                     return;
             }
         } catch (Exception e) {

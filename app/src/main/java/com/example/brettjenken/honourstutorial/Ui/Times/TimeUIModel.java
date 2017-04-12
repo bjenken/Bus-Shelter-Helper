@@ -3,12 +3,11 @@ package com.example.brettjenken.honourstutorial.Ui.Times;
 /**
  * Created by Brett on 11/24/2016.
  */
-public class TimeUIModel {
+public class TimeUiModel {
 
 
-    public TimeUIModel(String time, String destination) {
-        this.setTime(time);
-        this.setDestination(destination);
+    public TimeUiModel() {
+
     }
 
     public String getTime() {

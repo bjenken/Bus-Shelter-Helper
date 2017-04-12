@@ -32,8 +32,6 @@ public class AppDbRouteDao extends SQLiteOpenHelper {
 
     public AppDbRouteDao(Context context) {
         super(context, AppDbRouteTableData.DATABASE_NAME, null, databaseVersion);
-        //this.getWritableDatabase().execSQL("DROP TABLE IF EXISTS '" + AppDbRouteTableData.TABLE_NAME + "'");
-        //this.getWritableDatabase().execSQL(createQuery);
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -55,11 +53,6 @@ public class AppDbRouteDao extends SQLiteOpenHelper {
 
         long k = db.insert(AppDbRouteTableData.TABLE_NAME, null, cv);
         Log.d("DB Route Service", "1 Row Inserted");
-        try {
-            writeToSD();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public Cursor getAllEntriesForStop(SQLiteDatabase db, String stopNum){
@@ -67,16 +60,13 @@ public class AppDbRouteDao extends SQLiteOpenHelper {
                 "select * from "
                         + AppDbRouteTableData.TABLE_NAME
                         + " where "
-                        + AppDbRouteTableData.STOP_NUMBER
-                        + "=?",
+                        + AppDbRouteTableData.STOP_NUMBER + "=?",
                 new String[] { stopNum });
         Log.d("DB Route Service", "Entries Retrieved");
         return c;
 
     }
     public boolean stopInTable(SQLiteDatabase db, String stopNum){
-        //db.execSQL("DROP TABLE IF EXISTS '" + AppDbRouteTableData.TABLE_NAME + "'");
-        //db.execSQL(createQuery);
         Cursor c = db.rawQuery(
                 "select * from "
                         + AppDbRouteTableData.TABLE_NAME
@@ -94,30 +84,6 @@ public class AppDbRouteDao extends SQLiteOpenHelper {
                             + AppDbRouteTableData.DIRECTION + "=?"
                             , new String[]{stopNum, number, direction});
         Log.d("DB Route Service", "1 Row Deleted");
-        try {
-            writeToSD();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
-    //for Debug purposes
-    private void writeToSD() throws IOException {
-        File sd = Environment.getExternalStorageDirectory();
-
-        if (sd.canWrite()) {
-            String currentDBPath = AppDbRouteTableData.DATABASE_NAME;
-            String backupDBPath = "routeTableBackup.db";
-            File currentDB = new File("/data/data/brettjenken.busshelterhelper/databases/", currentDBPath);
-            File backupDB = new File(sd, backupDBPath);
-
-            if (currentDB.exists()) {
-                FileChannel src = new FileInputStream(currentDB).getChannel();
-                FileChannel dst = new FileOutputStream(backupDB).getChannel();
-                dst.transferFrom(src, 0, src.size());
-                src.close();
-                dst.close();
-            }
-        }
-    }
 }

@@ -33,7 +33,7 @@ public class RoutesListActivity extends AppCompatActivity implements AdapterView
         RoutesBackgroundTask routesBackgroundTask = new RoutesBackgroundTask(this, this, this, null);
         dialog = ProgressDialog.show(RoutesListActivity.this, "",
                 "Loading. Please wait...", true);
-        routesBackgroundTask.execute(UiUtils.RouteBackGroundTaskInputValues.CHECK_APP_DB_FOR_STOP.name(), stopId);
+        routesBackgroundTask.execute(UiUtils.RouteBackgroundTaskInputValues.CHECK_APP_DB_FOR_STOP.name(), stopId);
 
     }
 
@@ -62,8 +62,8 @@ public class RoutesListActivity extends AppCompatActivity implements AdapterView
 
     @Override
     public void backGroundTaskSuccess(String result) {
-        UiUtils.RouteBackGroundTaskReturnValues returnCase =
-                UiUtils.RouteBackGroundTaskReturnValues.valueOf(result);
+        UiUtils.RouteBackgroundTaskReturnValues returnCase =
+                UiUtils.RouteBackgroundTaskReturnValues.valueOf(result);
         switch(returnCase){
             case EMPTY:
                 if (dialog.isShowing())
@@ -80,13 +80,13 @@ public class RoutesListActivity extends AppCompatActivity implements AdapterView
                 return;
             case STOP_FOUND:
                 RoutesBackgroundTask updateStop = new RoutesBackgroundTask(this, this, this, null);
-                updateStop.execute(UiUtils.RouteBackGroundTaskInputValues.UPDATE_STOP_IN_APP_DB.name(), stopId);
+                updateStop.execute(UiUtils.RouteBackgroundTaskInputValues.UPDATE_STOP_IN_APP_DB.name(), stopId);
                 RoutesBackgroundTask routesBackgroundTask = new RoutesBackgroundTask(this, this, this, null);
-                routesBackgroundTask.execute(UiUtils.RouteBackGroundTaskInputValues.GET_ROUTES_FROM_APP_DB.name(), stopId);
+                routesBackgroundTask.execute(UiUtils.RouteBackgroundTaskInputValues.GET_ROUTES_FROM_APP_DB.name(), stopId);
                 break;
             case STOP_NOT_FOUND:
                 RoutesBackgroundTask getStop = new RoutesBackgroundTask(this, this, this, null);
-                getStop.execute(UiUtils.RouteBackGroundTaskInputValues.GET_STOP_FROM_OC_DB.name(), stopId);
+                getStop.execute(UiUtils.RouteBackgroundTaskInputValues.GET_STOP_FROM_OC_DB.name(), stopId);
                 break;
         }
     }
@@ -117,9 +117,9 @@ public class RoutesListActivity extends AppCompatActivity implements AdapterView
     @Override
     public void serviceSuccess(ServiceStopModel stop) {
         RoutesBackgroundTask addStopBackgroundTask = new RoutesBackgroundTask(this, this, this, stop);
-        addStopBackgroundTask.execute(UiUtils.RouteBackGroundTaskInputValues.ADD_STOP_TO_APP_DB.name());
+        addStopBackgroundTask.execute(UiUtils.RouteBackgroundTaskInputValues.ADD_STOP_TO_APP_DB.name());
         RoutesBackgroundTask routesBackgroundTask = new RoutesBackgroundTask(this, this, this, stop);
-        routesBackgroundTask.execute(UiUtils.RouteBackGroundTaskInputValues.GET_ROUTES_FROM_STOP_OBJECT.name());
+        routesBackgroundTask.execute(UiUtils.RouteBackgroundTaskInputValues.GET_ROUTES_FROM_STOP_OBJECT.name());
     }
 
     @Override

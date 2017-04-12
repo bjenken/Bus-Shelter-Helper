@@ -10,9 +10,7 @@ public class ServiceTripModel {
     }
 
     private String tripDestination;
-    private String tripStartTime;
     private String adjustedScheduleTime;
-    private String busType;
 
     public String getTripDestination() {
         return tripDestination;
@@ -20,14 +18,6 @@ public class ServiceTripModel {
 
     public void setTripDestination(String tripDestination) {
         this.tripDestination = tripDestination;
-    }
-
-    public String getTripStartTime() {
-        return tripStartTime;
-    }
-
-    public void setTripStartTime(String tripStartTime) {
-        this.tripStartTime = tripStartTime;
     }
 
     public String getAdjustedScheduleTime() {
@@ -38,12 +28,5 @@ public class ServiceTripModel {
         this.adjustedScheduleTime = adjustedScheduleTime;
     }
 
-    public String getBusType() {
-        return busType;
-    }
-
-    public void setBusType(String busType) {
-        this.busType = busType;
-    }
 
 }

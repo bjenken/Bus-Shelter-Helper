@@ -14,6 +14,7 @@ public class ServiceRouteModel {
     }
     private int routeNo,
                 directionId;
+
     private String direction,
             routeHeading;
 

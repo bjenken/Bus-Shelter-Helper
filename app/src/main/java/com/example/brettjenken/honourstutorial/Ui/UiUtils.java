@@ -5,7 +5,7 @@ package com.example.brettjenken.honourstutorial.Ui;
  */
 
 public class UiUtils {
-    public enum RouteBackGroundTaskInputValues{
+    public enum RouteBackgroundTaskInputValues {
         GET_ROUTES_FROM_STOP_OBJECT,
         ADD_STOP_TO_APP_DB,
         CHECK_APP_DB_FOR_STOP,
@@ -14,7 +14,7 @@ public class UiUtils {
         GET_STOP_FROM_OC_DB
     }
 
-    public enum RouteBackGroundTaskReturnValues {
+    public enum RouteBackgroundTaskReturnValues {
         ROUTES_RETRIEVED_FROM_STOP_OBJECT,
         STOP_ADDED_TO_APP_DB,
         APP_DB_CHECKED_FOR_STOP,
@@ -26,15 +26,30 @@ public class UiUtils {
         STOP_NOT_FOUND
     }
 
-    public enum StopBackGroundTaskInputValues {
+    public enum StopBackgroundTaskInputValues {
         GET_ALL_STOPS,
-        CHECK_FOR_STOP,
-        BUILD_TABLES
+        CHECK_FOR_STOP
     }
 
-    public enum StopBackGroundTaskReturnValues {
+    public enum StopBackgroundTaskReturnValues {
         STOPS_RETRIEVED,
-        STOP_FOUND,
-        TABLES_BUILT
+        STOP_FOUND
+    }
+
+    public enum TimesBackgroundTaskInputValues{
+        GET_ALL_TIMES
+    }
+
+    public enum TimesBackgroundTaskReturnValues{
+        TIMES_RETRIEVED,
+        EMPTY
+    }
+
+    public enum ApiServiceInputValues{
+        GET_ALL_TIMES
+    }
+
+    public enum ApiServiceReturnValues{
+        ALL_TIMES_RETRIEVED
     }
 }
