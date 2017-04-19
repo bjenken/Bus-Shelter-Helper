@@ -53,7 +53,6 @@ public class TimesBackgroundTask extends AsyncTask<String, TimeUiModel, String> 
 
     private String getAllTimes(){
         listView = (ListView) activity.findViewById(R.id.timesListListView);
-        String timeStr, destination;
         timeAdapter = new TimeAdapter(context, R.layout.display_time_row_layout);
 
         ServiceRouteModel stopRoute;

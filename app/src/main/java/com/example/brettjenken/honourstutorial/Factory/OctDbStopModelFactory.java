@@ -42,18 +42,15 @@ public class OctDbStopModelFactory {
     {
         int start = 0;
         int max = 0;
-        for (int i = 0; i < s1.length(); i++)
-        {
-            for (int j = 0; j < s2.length(); j++)
-            {
+        for (int i = 0; i < s1.length(); i++) {
+            for (int j = 0; j < s2.length(); j++) {
                 int x = 0;
-                while (s1.charAt(i + x) == s2.charAt(j + x))
-                {
+                while (s1.charAt(i + x) == s2.charAt(j + x)) {
                     x++;
-                    if (((i + x) >= s1.length()) || ((j + x) >= s2.length())) break;
+                    if (((i + x) >= s1.length()) || ((j + x) >= s2.length()))
+                        break;
                 }
-                if (x > max)
-                {
+                if (x > max) {
                     max = x;
                     start = i;
                 }

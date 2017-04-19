@@ -55,18 +55,6 @@ public class StopsBackgroundTask extends AsyncTask<String, StopUiModel, String> 
 
     private String getAllStops(){
         SQLiteDatabase db = appDbStopService.getReadableDatabase();
-        String[] ids = {"1234", "5678"};
-        String[] locations = {"Carleton", "Rideau Centre"};
-        String[] routes = {"4, 7, 111", "95, 65, 39"};
-        //generates mock data
-        for(int i = 0; i < 2; i++){
-            StopUiModel stop = new StopUiModel();
-            stop.setId(ids[i]);
-            stop.setLocation(locations[i]);
-            stop.setRoutes(routes[i]);
-            //comment out after data is successfully added
-            //appDbStopService.insertRow(db, stop);
-        }
         //gets the table entries
         Cursor cursor = appDbStopService.getAllEntries(db);
         listView = (ListView) activity.findViewById(R.id.stopsListListView);
