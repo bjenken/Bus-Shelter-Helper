@@ -78,8 +78,6 @@ public class StopsListActivity extends AppCompatActivity implements AdapterView.
     @Override
     public void onBackPressed() {
         //avoids the user being sent to the blank MainActivity
-        //hacky
-        //give a quit dialogue or something
     }
 
     @Override

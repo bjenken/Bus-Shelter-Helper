@@ -16,7 +16,6 @@ import com.example.brettjenken.honourstutorial.UIBackgroundTaskCallback;
 public class StopsBackgroundTask extends AsyncTask<String, StopUIModel, String> {
     Context context;
     StopAdapter stopAdapter;
-    //RouteAdapter routeAdapter;
     Activity activity;
     ListView listView;
     UIBackgroundTaskCallback callback;
