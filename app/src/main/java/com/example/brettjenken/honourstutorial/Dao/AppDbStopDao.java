@@ -41,8 +41,6 @@ public class AppDbStopDao extends SQLiteOpenHelper {
     public AppDbStopDao(Context context) {
         super(context, AppDbStopTableData.DATABASE_NAME, null, databaseVersion);
         db = getWritableDatabase();
-        //this.getWritableDatabase().execSQL("DROP TABLE IF EXISTS '" + AppDbStopTableData.TABLE_NAME + "'");
-        //this.getWritableDatabase().execSQL(createQuery);
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -67,11 +65,6 @@ public class AppDbStopDao extends SQLiteOpenHelper {
 
         long k = db.insert(AppDbStopTableData.TABLE_NAME, null, cv);
         Log.d("DB Stop Service", "1 Row Inserted");
-        try {
-            writeToSD();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void deleteRow(SQLiteDatabase db, String stopNumber){
@@ -79,11 +72,6 @@ public class AppDbStopDao extends SQLiteOpenHelper {
                   AppDbStopTableData.STOP_NUMBER + "=" + stopNumber,
                   null);
         Log.d("DB Stop Service", "1 Row Deleted");
-        try {
-            writeToSD();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void updateAccessedTime(SQLiteDatabase db, String stopNumber, long lastAccessed){
@@ -92,11 +80,6 @@ public class AppDbStopDao extends SQLiteOpenHelper {
         db.update(AppDbStopTableData.TABLE_NAME, cv,
                   AppDbStopTableData.STOP_NUMBER + "= ?",
                   new String[] {stopNumber});
-        try {
-            writeToSD();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         Log.d("DB Stop Service", "1 Row Updated");
     }
     public Cursor getAllEntries(SQLiteDatabase db){
@@ -126,23 +109,4 @@ public class AppDbStopDao extends SQLiteOpenHelper {
         return c.getCount() != 0;
     }
 
-    //for Debug purposes
-    private void writeToSD() throws IOException {
-        File sd = Environment.getExternalStorageDirectory();
-
-        if (sd.canWrite()) {
-            String currentDBPath = AppDbStopTableData.DATABASE_NAME;
-            String backupDBPath = "stopTableBackup.db";
-            File currentDB = new File("/data/data/brettjenken.busshelterhelper/databases/", currentDBPath);
-            File backupDB = new File(sd, backupDBPath);
-
-            if (currentDB.exists()) {
-                FileChannel src = new FileInputStream(currentDB).getChannel();
-                FileChannel dst = new FileOutputStream(backupDB).getChannel();
-                dst.transferFrom(src, 0, src.size());
-                src.close();
-                dst.close();
-            }
-        }
-    }
 }

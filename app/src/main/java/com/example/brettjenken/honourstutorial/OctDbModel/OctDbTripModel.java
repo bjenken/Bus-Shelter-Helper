@@ -5,7 +5,7 @@ package com.example.brettjenken.honourstutorial.OctDbModel;
  */
 
 public class OctDbTripModel {
-    String routeId, serviceId, tripId, tripHeadsign, direction;
+    String routeId, tripHeadsign, direction;
 
     public OctDbTripModel() {
     }
@@ -16,22 +16,6 @@ public class OctDbTripModel {
 
     public void setRouteId(String routeId) {
         this.routeId = routeId;
-    }
-
-    public String getServiceId() {
-        return serviceId;
-    }
-
-    public void setServiceId(String serviceId) {
-        this.serviceId = serviceId;
-    }
-
-    public String getTripId() {
-        return tripId;
-    }
-
-    public void setTripId(String tripId) {
-        this.tripId = tripId;
     }
 
     public String getTripHeadsign() {

@@ -4,10 +4,6 @@ import com.example.brettjenken.honourstutorial.OctDbModel.OctDbStopModel;
 import com.example.brettjenken.honourstutorial.ServiceModel.ServiceRouteModel;
 import com.example.brettjenken.honourstutorial.ServiceModel.ServiceStopModel;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.List;
 
 
@@ -22,13 +18,13 @@ public class ServiceStopModelFactory {
         this.serviceRouteModelFactory = new ServiceRouteModelFactory();
     }
 
-    public ServiceStopModel getStopApiModel(){
+    public ServiceStopModel getServiceStopModel(){
         return new ServiceStopModel();
     }
 
 
     public ServiceStopModel getStopWithRoutes(OctDbStopModel stop, List<ServiceRouteModel> routes){
-        ServiceStopModel output = this.getStopApiModel();
+        ServiceStopModel output = this.getServiceStopModel();
         output.setRoutes(routes);
         output.setStopDescription(stop.getStopName());
         output.setStopNo(stop.getStopCode());

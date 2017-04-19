@@ -15,7 +15,7 @@ public class ServiceTripModelFactory {
     public ServiceTripModelFactory() {
     }
 
-    public ServiceTripModel getTripAPIModel(){
+    public ServiceTripModel getServiceTripModel(){
         return new ServiceTripModel();
     }
 

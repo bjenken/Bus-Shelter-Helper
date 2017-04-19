@@ -48,7 +48,7 @@ public class OctDbStopTimeDao extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(createQuery);
-        this.importFromCSV(db);
+        importFromCSV(db);
         Log.d("OC DB Stop Time Service", "Table Created");
     }
 
@@ -126,32 +126,6 @@ public class OctDbStopTimeDao extends SQLiteOpenHelper {
         db.setTransactionSuccessful();
         db.endTransaction();
 
-        try {
-            this.writeToSD();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    //for Debug purposes
-    private void writeToSD() throws IOException {
-        File sd = Environment.getExternalStorageDirectory();
-
-        if (sd.canWrite()) {
-            String currentDBPath = OctDbStopTimeTableData.DATABASE_NAME;
-            String backupDBPath = "ocDBBackup.db";
-            File currentDB = new File("/data/data/brettjenken.busshelterhelper/databases/", currentDBPath);
-            File backupDB = new File(sd, backupDBPath);
-
-            if (currentDB.exists()) {
-                FileChannel src = new FileInputStream(currentDB).getChannel();
-                FileChannel dst = new FileOutputStream(backupDB).getChannel();
-                dst.transferFrom(src, 0, src.size());
-                src.close();
-                dst.close();
-            }
-        }
     }
 
     private String makePlaceholders(int length) {
